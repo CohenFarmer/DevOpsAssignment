@@ -15,6 +15,7 @@ spec:
       containers:
         - name: backend
           image: mern-app-backend:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5000
           env:

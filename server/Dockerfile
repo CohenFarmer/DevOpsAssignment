@@ -1,4 +1,3 @@
-# Backend Dockerfile (simplified)
 FROM node:18 AS build
 WORKDIR /app
 RUN git clone --depth 1 https://github.com/doananhtingithub40102/mern-app.git . \
