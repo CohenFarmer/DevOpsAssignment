@@ -40,4 +40,4 @@ spec:
   ports:
     - port: 8081
       targetPort: 8081
-      nodePort: 30081   # external access
+      nodePort: 30081
