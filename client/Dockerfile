@@ -10,6 +10,7 @@ RUN npm install && npm run build
 FROM nginx:alpine
 COPY --from=build /app/client/build /usr/share/nginx/html
 
+# added this to handle api requests with kubernetes 
 RUN rm /etc/nginx/conf.d/default.conf \
     && cat > /etc/nginx/conf.d/default.conf <<'EOF'
 server {
@@ -18,17 +19,14 @@ server {
     root /usr/share/nginx/html;
     index index.html;
 
-    # API proxy: React calls /api/*
     location /api/ {
         rewrite ^/api/(.*)$ /$1 break;
-        # Keep original /api path when forwarding (no trailing slash in proxy_pass)
-        proxy_pass http://backend:5000;  # so /api/health -> backend:5000/api/health
+        proxy_pass http://backend:5000;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
 
-    # SPA fallback
     location / {
         try_files $uri /index.html;
     }
